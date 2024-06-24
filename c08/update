@@ -1,63 +1,64 @@
-#ifndef FT_ABS_H
-# define FT_ABS_H
-
-# define ABS(Value) \
-    do { \
-        if (Value < 0) { \
-            Value = -Value; \
-        } \
-    } while (0)
-
-#endif
-
-
-
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-char	*ft_strjoin(int size, char **strs, char *sep)
+int	str_len(char *str)
 {
-	char	*s;
-	int		i;
-	int		j;
-	int		c;
-if (size == 0)
-{
-    s = malloc(1);
-    if (!s) return NULL;
-    s[0] = '\0';
-    return s;
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-	s = malloc(sizeof(strs));
+char	*create_str(int size, char **strs, char *sep)
+{
+	char	*str;
+	int	len;
+	int	i;
+
+	len = 0;
 	i = 0;
-	c = 0;
 	while (i < size)
 	{
-		j = 0;
-		while (strs[i][j] != '\0')
-		{
-			s[c++] = strs[i][j++];
-		}
-		j = 0;
-		while (sep[j] != '\0' && i != size - 1)
-		{
-			s[c++] = sep[j++];
-		}
+		len += str_len(strs[i]);
 		i++;
 	}
-	s[c] = '\0';
-	return (s);
+	len += str_len(sep) * (size - 1);
+	if (size <= 0)
+		len = 1;
+	str = (char *)malloc(sizeof(char) * len);
+	if (!str)
+		return (0);
+	return (str);
 }
-/*
-int	main(void)
+
+char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	char	*tab[4];
-	tab[0] = "h";
-	tab[1] = "e";
-	tab[2] = "ll";
-	tab[3] = "o";
-	printf("%s", ft_strjoin(4, tab, ""));
-	return (0);
+	int	i;
+	int	j;
+	int	k;
+	char	*str;
+
+	str = create_str(size, strs, sep);
+	i = -1;
+	k = 0;
+	while (++i < size)
+	{
+		j = 0;
+		while (strs[i][j])
+		{
+			str[k++] = strs[i][j];
+			j++;
+		}
+		j = 0;
+		while (sep[j] && i != size - 1)
+		{
+			str[k++] = sep[j];
+			j++;
+		}
+	}
+	str[k] = '\0';
+	return (str);
 }
-*/
